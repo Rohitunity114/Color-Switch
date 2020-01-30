@@ -5,7 +5,9 @@ using UnityEngine;
 public class player : MonoBehaviour
 {
     public string ColorMatch;
-    
+    public GameObject winEffect;
+    public GameObject winEffect2;
+
     public float MoveSpeed = 10f;
 
     public Rigidbody2D rb;
@@ -18,6 +20,7 @@ public class player : MonoBehaviour
     void Start()
     {
         SwitchColor();
+       
     }
     void Update()
     {
@@ -42,6 +45,8 @@ public class player : MonoBehaviour
         if(coll.tag == "Win")
         {
             Debug.Log("Game Win!!");
+            Instantiate(winEffect, transform.position, Quaternion.identity);
+            Instantiate(winEffect2, transform.position, Quaternion.identity);
             Destroy(coll.gameObject);
             Destroy(gameObject);
             return;
