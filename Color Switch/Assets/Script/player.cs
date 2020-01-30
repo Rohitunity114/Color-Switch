@@ -1,14 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class player : MonoBehaviour
 {
+    public ScanFeder feder;
     public string ColorMatch;
     public GameObject winEffect;
     public GameObject winEffect2;
+    public GameObject gameOverScreen;
+    public Text scoreText;
+   
 
     public float MoveSpeed = 10f;
+    public int Score;
+    
 
     public Rigidbody2D rb;
     public SpriteRenderer sp;
@@ -18,9 +26,9 @@ public class player : MonoBehaviour
     public Color Blue;
     public Color Pink;
     void Start()
-    {
+    {        
         SwitchColor();
-       
+        Score = 0;
     }
     void Update()
     {
@@ -32,17 +40,15 @@ public class player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D coll)
     {
-        if(coll.tag != ColorMatch)
-        {
-            Debug.Log("Game Over");
-        }    
-        if(coll.tag == "ColorChanger")
+        if (coll.tag == "ColorChanger")
         {
             SwitchColor();
+            Score += 10;
+            scoreText.text = Score.ToString();
             Destroy(coll.gameObject);
-            return;           
+            return;
         }
-        if(coll.tag == "Win")
+        if (coll.tag == "Win")
         {
             Debug.Log("Game Win!!");
             Instantiate(winEffect, transform.position, Quaternion.identity);
@@ -51,8 +57,19 @@ public class player : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        if (coll.tag != ColorMatch)
+        {
+            //Debug.Log("Game Over");
+            gameOverScreen.SetActive(value: true);            
+            return;
+        }    
+       
+       
     }
-   
+    //public void FadeGameOver(string screenName)
+    //{
+    //    feder.FadeTo(screenName);
+    //}
     private void SwitchColor()
     {
         float Number = Random.Range(0, 4);
@@ -85,5 +102,12 @@ public class player : MonoBehaviour
                 }
         }
     }
-
+    public void Restart()
+    {
+       feder.FadeTo(SceneManager.GetActiveScene().name);
+    }
+    public void Menu(string LevelName)
+    {
+        feder.FadeTo(LevelName);
+    }
 }
